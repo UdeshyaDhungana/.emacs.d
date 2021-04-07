@@ -1,11 +1,35 @@
-# Compiled
 *.elc
-
-# Packaging
-.cask
-
-# Backup files
+modules/*.elc
+*.#*
+*.*~
 *~
+/elpa
+/cache
+/.cache
+/savefile
+/extra
+/.lsp-session-v1
+/.org-id-locations
+/eshell/
+/image-dired/
+/modules/.#go-config.el
+/newsticker/
+/semanticdb/
+/server/
+/url/
 
-# Undo-tree save-files
-*.~undo-tree
+/bookmarks
+/recentf
+/.extension/
+/.tutor/
+/emojis/
+/games/
+/request/
+/tramp
+/viper
+/modules/git-clones/
+custom.el
+/custom.el
+/nov-places
+
+ido.last
