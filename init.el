@@ -1,192 +1,210 @@
-(load-theme 'gruvbox-dark-medium t)
-
-;; Maximize on start
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; Simple use-package declaration
-(eval-when-compile
-  (require 'use-package))
-
-;; ============================================================
-;; Loaded from emacs GUI settings
+;; ========================================GUI settings
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector
-   ["#3c3836" "#fb4933" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"])
- '(blink-cursor-mode nil)
  '(column-number-mode t)
- '(company-quickhelp-color-background "#4F4F4F")
- '(company-quickhelp-color-foreground "#DCDCCC")
- '(compilation-message-face 'default)
- '(custom-safe-themes nil)
- '(display-battery-mode t)
+ '(custom-enabled-themes '(gruvbox-dark-medium))
+ '(custom-safe-themes
+   '("8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default))
  '(display-line-numbers-type 'relative)
- '(fci-rule-color "#383838")
  '(global-display-line-numbers-mode t)
- '(highlight-changes-colors '("#FD5FF0" "#AE81FF"))
- '(highlight-tail-colors
-   '(("#3C3D37" . 0)
-     ("#679A01" . 20)
-     ("#4BBEAE" . 30)
-     ("#1DB4D0" . 50)
-     ("#9A8F21" . 60)
-     ("#A75B00" . 70)
-     ("#F309DF" . 85)
-     ("#3C3D37" . 100)))
- '(magit-diff-use-overlays nil)
- '(nrepl-message-colors
-   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+ '(line-number-mode nil)
  '(package-selected-packages
-   '(counsel-projectile projectile slime-company gruvbox-theme ewal-spacemacs-themes slime avy multiple-cursors company-quickhelp rainbow-mode emojify company smartparens evil-smartparens magit counsel which-key use-package))
- '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
- '(pos-tip-background-color "#FFFACE" t)
- '(pos-tip-foreground-color "#272822" t)
- '(scroll-bar-mode nil)
- '(show-paren-mode t)
- '(tool-bar-mode nil)
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map
-   '((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3")))
- '(vc-annotate-very-old-color "#DC8CC3")
- '(weechat-color-list
-   '(unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
+   '(multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard company hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+ '(tool-bar-mode nil))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 108 :width normal))))
- '(company-scrollbar-bg ((t (:background "#45bb4ed351db"))))
- '(company-scrollbar-fg ((t (:background "#39f441834408"))))
- '(company-tooltip ((t (:inherit default :background "#32e339873bbd"))))
- '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
- '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
-;; ============================================================
-;; More editor settings
+ '(default ((t (:inherit nil :extend nil :stipple nil :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 110 :width normal :foundry "DAMA" :family "Fira Code Retina")))))
 
-;; Changing yes/no to y/n
+;; ========================================Editor custom settings
 (defalias 'yes-or-no-p 'y-or-n-p)
+(setq inhibit-startup-message t)
+(add-to-list 'default-frame-alist '(fullscreen . maximized)) ;Maximize on start
 
+;; ansi-term
+(defvar my-term-shell "/bin/bash")
+(defadvice ansi-term (before force-bash)
+  (interactive (list my-term-shell)))
+(ad-activate 'ansi-term)
+;; launch ansi term shortcut
+(global-set-key (kbd "<s-return>") 'ansi-term)
+
+;; scrolling
+(setq scroll-conservatively 100)
+;; disable bell
+(setq ring-bell-function 'ignore)
+;; Disable annyoances
+(when window-system (global-hl-line-mode t))
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
+;; Ido mode
+(setq ido-enable-flex-matching nil)
+(setq ido-create-new-buffer 'always)
+;; (setq ido-everywhere t)
+(ido-mode 1)
+(global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+
+;; iBuffer
+(global-set-key (kbd "C-x b") 'ibuffer)
+
+;; Editing config files
+(defun config-visit()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "C-c e") 'config-visit)
+
+;; Reloading config files
+(defun config-reload()
+  (interactive)
+  (load-file "~/.emacs.d/init.el"))
+(global-set-key (kbd "C-c r") 'config-reload)
+
+;; Better windows
+(defun split-and-follow-horizontally()
+  (interactive)
+  (split-window-below)
+  (balance-windows)
+  (other-window 1))
+(global-set-key (kbd "C-x 2") 'split-and-follow-horizontally)
+
+(defun split-and-follow-vertically()
+  (interactive)
+  (split-window-right)
+  (balance-windows)
+  (other-window 1))
+(global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
+
+(setq electric-pair-pairs '(
+			    (?\( . ?\))
+			    (?\[ . ?\])
+			    (?\{ . ?\})))
+(electric-pair-mode t)
+
+(line-number-mode 1)
+(column-number-mode 1)
+
+;; kill current buffer
+(defun kill-curr-buffer()
+  (interactive)
+  (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x k") 'kill-curr-buffer)
+
+;; Copy line
+(defun copy-whole-line()
+  (interactive)
+  (save-excursion
+    (kill-new
+     (buffer-substring
+      (point-at-bol)
+      (point-at-eol)))))
+(global-set-key (kbd "C-c w l") 'copy-whole-line)
+
+;; clock
+(display-time-mode 1)
+
+;; ========================================Packages
 ;; Add MELPA to emacs
 (require 'package)
+(setq package-enable-at-startup nil)
 (add-to-list 'package-archives
              '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(package-initialize)
 
-;; Packages
-;; ============================================================
+;; Use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(unless (package-installed-p 'gruvbox-theme)
+  (package-refresh-contents)
+  (package-install 'gruvbox-theme))
 
 ;; which-key
 (use-package which-key
   :ensure t
-  :config
-  (which-key-mode +1))
+  :init
+  (which-key-mode))
 
-;; Ivy
-(use-package ivy
+;; org bullets
+(use-package org-bullets
   :ensure t
   :config
-  (ivy-mode t)
-  (setq ivy-use-virtual-buffers t
-	ivy-count-format "[%d/%d] "))
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
 
-;; Counsel
-(use-package counsel
-  :ensure t
-  :bind (("C-s" . swiper-isearch)
-	 ("M-x" . counsel-M-x)
-	 ("C-x C-f" . counsel-find-file)
-	 ("M-y" . counsel-yank-pop)
-	 ("<f1> f" . counsel-describe-function)
-	 ("<f1> v" . counsel-describe-variable)
-	 ("<f1> l" . counsel-find-library)
-	 ("<f2> i" . counsel-info-lookup-symbol)
-	 ("<f2> u" . counsel-unicode-char)
-	 ("<f2> j" . counsel-set-variable)
-	 ("C-x b" . ivy-switch-buffer)
-	 ("C-<tab>" . ivy-switch-buffer)
-	 ("C-c v" . ivy-push-view)
-	 ("C-c V" . ivy-pop-view)))
-
-;; Swiper
-(use-package swiper
-  :ensure t)
-
-;; Magit
-(use-package magit
-  :ensure t
-  :defer t)
-
-;; Smartparens
-(use-package smartparens
+;; Idon-vertical
+(use-package ido-vertical-mode
   :ensure t
   :init
-  (require 'smartparens-config)
-  :config
-  (smartparens-global-mode t)
-  :hook ((prog-mode . smartparens-mode))
-  :bind (
-	 ;; Unlisted are unchanged
-	 ;; Movement
-	 ("C-M-a" . sp-beginning-of-sexp)
-	 ("C-M-e" . sp-end-of-sexp)
+  (ido-vertical-mode 1)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only))
 
-	 ;; wrapping and unwrapping
-	 ("C-M-d" . sp-unwrap-sexp)))
+;; Smex (ido for M-x)
+(use-package smex
+  :ensure t
+  :init (smex-initialize)
+  :bind
+  ("M-x" . smex))
 
-;; Emojify
-(use-package emojify
-  :hook (after-init . global-emojify-mode))
+;; avy
+(use-package avy
+  :ensure t
+  :bind
+  ("M-s" . avy-goto-char-2))
 
-;; Rainbow mode
+;; rainbow mode
 (use-package rainbow-mode
   :ensure t
-  :config
-  (add-hook 'prog-mode-hook #'rainbow-mode))
+  :init (rainbow-mode 1))
 
+;; hungry-delete
+(use-package hungry-delete
+  :ensure t
+  :config (global-hungry-delete-mode))
+
+;; Dashboard
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-items '((recents . 10)))
+  (setq dashboard-banner-logo-title "Welcome!")
+  (setq dashboard-startup-banner "~/Pictures/emacs.png"))
+  
+;; ========================================Company
+;; company works by default with elisp
 (use-package company
   :ensure t
-  :demand t
   :init
-  (setf company-frontends
-	'(company-echo-frontend company-pseudo-tooltip-frontend company-echo-metadata-frontend company-preview-if-just-one-frontend))
-  (global-company-mode 1)
-  :custom
-  (company-idle-delay 0.2)
-  (company-auto-complete t)
-  (company-minimum-prefix-length 2)
-  
-  :bind (("C-?" . company-show-doc-buffer)))
-
-(use-package company-quickhelp
-  :ensure t
-  :after company
-  :custom
-  ;; (company-quickhelp-color-background "#4F4F4F")
-  ;; (company-quickhelp-color-foreground "#DCDCCC")
-  (company-quickhelp-mode t)
-  (company-quickhelp-use-propertized-text t)
+  (add-hook 'after-init-hook 'global-company-mode)
   :config
-  (add-to-list 'company-frontends 'company-quickhelp-frontend))
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3))
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "SPC") #'company-abort))
+
+
+;; ========================================
+;; spaceline
+(use-package telephone-line
+  :ensure t
+  :config
+  (telephone-line-mode 1))
+
+;; swiper
+(use-package swiper
+  :ensure t
+  :bind ("C-s" . swiper))
 
 ;; multiple cursors
 (use-package multiple-cursors
@@ -197,49 +215,3 @@
 	 ("C->" . mc/mark-next-like-this)
 	 ("C-<" . mc/mark-previous-like-this)
 	 ("C-c C-<" . mc/mark-all-like-this)))
-
-;; avy
-(use-package avy
-  :ensure t
-  :defer t
-  :config
-  (setq avy-timeout-seconds 1)
-  :bind (("C-:" . avy-goto-char)
-	 ("C-'" . avy-goto-char-2)
-	 ("C-\"" . avy-goto-char-timer)))
-
-;; slime
-;; workflow
-(use-package slime
-  :ensure t
-  :hook
-  (add-to-list 'company-backends 'company-slime)
-  :config
-  (setq inferior-lisp-program "sbcl")
-  (require 'slime-autoloads))
-
-;; projectile
-(use-package projectile
-  :ensure t
-  :defer t
-  :config
-  (require 'counsel-projectile)
-  :init 
-  (setq projectile-indexing-method 'alien)
-  :bind-keymap ("C-c p" . projectile-command-map))
-
-;; Counsel projectile
-(use-package counsel-projectile
-  :ensure t
-  :defer t 
-  :config
-  (counsel-projectile-mode 1))
-
-;; Learn magit
-;; Learn org writing
-;; Learn org agendas
-;; ====================
-;; setup C development
-;; setup python development
-;; setup web development
-;; setup flutter development
