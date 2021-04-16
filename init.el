@@ -1,18 +1,37 @@
+;; Essentials
+
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
+
+;; Use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(unless (package-installed-p 'dracula-theme)
+  (package-refresh-contents)
+  (package-install 'dracula-theme))
+
 ;; ========================================GUI settings
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#3c3836" "#fb4933" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"])
  '(column-number-mode t)
- '(custom-enabled-themes '(gruvbox-dark-medium))
- '(custom-safe-themes
-   '("8f97d5ec8a774485296e366fdde6ff5589cf9e319a584b845b6f7fa788c9fa9a" default))
+ '(custom-enabled-themes '(dracula))
  '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(line-number-mode nil)
  '(package-selected-packages
-   '(multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard company hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+   '(common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+ '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
+ '(show-paren-mode t)
  '(tool-bar-mode nil))
 
 (custom-set-faces
@@ -33,7 +52,7 @@
   (interactive (list my-term-shell)))
 (ad-activate 'ansi-term)
 ;; launch ansi term shortcut
-(global-set-key (kbd "<s-return>") 'ansi-term)
+(global-set-key (kbd "<s-M-return>") 'ansi-term)
 
 ;; scrolling
 (setq scroll-conservatively 100)
@@ -112,22 +131,10 @@
 ;; clock
 (display-time-mode 1)
 
+;; show parenthesis
+(show-paren-mode)
+
 ;; ========================================Packages
-;; Add MELPA to emacs
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(package-initialize)
-
-;; Use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(unless (package-installed-p 'gruvbox-theme)
-  (package-refresh-contents)
-  (package-install 'gruvbox-theme))
 
 ;; which-key
 (use-package which-key
@@ -164,7 +171,8 @@
 ;; rainbow mode
 (use-package rainbow-mode
   :ensure t
-  :init (rainbow-mode 1))
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-mode))
 
 ;; hungry-delete
 (use-package hungry-delete
@@ -177,29 +185,8 @@
   :config
   (dashboard-setup-startup-hook)
   (setq dashboard-items '((recents . 10)))
-  (setq dashboard-banner-logo-title "Welcome!")
+  (setq dashboard-banner-logo-title "One Hundred Flowers 🌹")
   (setq dashboard-startup-banner "~/Pictures/emacs.png"))
-  
-;; ========================================Company
-;; company works by default with elisp
-(use-package company
-  :ensure t
-  :init
-  (add-hook 'after-init-hook 'global-company-mode)
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 3))
-
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "SPC") #'company-abort))
-
-
-;; ========================================
-;; spaceline
-(use-package telephone-line
-  :ensure t
-  :config
-  (telephone-line-mode 1))
 
 ;; swiper
 (use-package swiper
@@ -215,3 +202,15 @@
 	 ("C->" . mc/mark-next-like-this)
 	 ("C-<" . mc/mark-previous-like-this)
 	 ("C-c C-<" . mc/mark-all-like-this)))
+
+;; magit
+(use-package magit
+  :ensure t
+  :defer t)
+
+;; ========================================Languages
+;; setup using lsp
+
+;; Modules
+(load "~/.emacs.d/programming.el")
+(load "~/.emacs.d/lisp-config.el")
