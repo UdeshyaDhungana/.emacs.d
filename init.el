@@ -25,11 +25,13 @@
    ["#3c3836" "#fb4933" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"])
  '(column-number-mode t)
  '(custom-enabled-themes '(dracula))
+ '(custom-safe-themes
+   '("fc041225c2c6c34143f46493fa69b347c6136464cbd9dac08d196259d7315ce4" default))
  '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(line-number-mode nil)
  '(package-selected-packages
-   '(common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+   '(python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -134,6 +136,9 @@
 ;; show parenthesis
 (show-paren-mode)
 
+;; for kde gaps
+(setq frame-resize-pixelwise t)
+
 ;; ========================================Packages
 
 ;; which-key
@@ -175,9 +180,9 @@
   (add-hook 'prog-mode-hook #'rainbow-mode))
 
 ;; hungry-delete
-(use-package hungry-delete
-  :ensure t
-  :config (global-hungry-delete-mode))
+;; (use-package hungry-delete
+;;   :ensure t
+;;   :config (global-hungry-delete-mode))
 
 ;; Dashboard
 (use-package dashboard
@@ -206,7 +211,8 @@
 ;; magit
 (use-package magit
   :ensure t
-  :defer t)
+  :defer t
+  :bind (("C-x g" . magit-status)))
 
 ;; ========================================Languages
 ;; setup using lsp
@@ -214,3 +220,4 @@
 ;; Modules
 (load "~/.emacs.d/programming.el")
 (load "~/.emacs.d/lisp-config.el")
+(load "~/.emacs.d/python.el")

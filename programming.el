@@ -2,12 +2,18 @@
   :ensure t
   :custom
   (company-auto-complete t)
-  (company-idle-delay 0.3)
+  (company-idle-delay 0.2)
   (company-require-match nil)
   (company-minimum-prefix-length 2)
   :init
   ;; should abort on pressing space
-  (global-company-mode 1))
+  (global-company-mode 1)
+  (defun company-abort-and-insert-space ()
+  (interactive)
+  (company-abort)
+  (insert " "))
+  :config
+  (define-key company-active-map (kbd "SPC") #'company-abort-and-insert-space))
   
 ;; yasnippet
 (use-package yasnippet
