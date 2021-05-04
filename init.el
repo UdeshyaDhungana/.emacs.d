@@ -24,7 +24,6 @@
  '(ansi-color-names-vector
    ["#3c3836" "#fb4933" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"])
  '(column-number-mode t)
- '(custom-enabled-themes '(adwaita))
  '(custom-safe-themes
    '("a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "fc041225c2c6c34143f46493fa69b347c6136464cbd9dac08d196259d7315ce4" default))
  '(display-line-numbers-type 'relative)
@@ -33,7 +32,7 @@
  '(org-agenda-files
    '("~/Org/coursework.org" "~/Org/programming.org" "~/Notes/keybindings.org"))
  '(package-selected-packages
-   '(exec-path-from-shell elpy ace-window python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+   '(emojify exec-path-from-shell elpy ace-window python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -207,9 +206,9 @@
   (setq dashboard-banner-logo-title "One Hundred Flowers 🌹")
   (setq dashboard-startup-banner "~/Pictures/emacs.png"))
 
-;; ;; emojify
-;; (use-package emojify
-;;   :hook (after-init . global-emojify-mode))
+;; emojify mode
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
 
 ;; swiper
 (use-package swiper
