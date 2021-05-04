@@ -24,14 +24,16 @@
  '(ansi-color-names-vector
    ["#3c3836" "#fb4933" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"])
  '(column-number-mode t)
- '(custom-enabled-themes '(dracula))
+ '(custom-enabled-themes '(adwaita))
  '(custom-safe-themes
-   '("fc041225c2c6c34143f46493fa69b347c6136464cbd9dac08d196259d7315ce4" default))
+   '("a22f40b63f9bc0a69ebc8ba4fbc6b452a4e3f84b80590ba0a92b4ff599e53ad0" "fc041225c2c6c34143f46493fa69b347c6136464cbd9dac08d196259d7315ce4" default))
  '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(line-number-mode nil)
+ '(org-agenda-files
+   '("~/Org/coursework.org" "~/Org/programming.org" "~/Notes/keybindings.org"))
  '(package-selected-packages
-   '(python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+   '(exec-path-from-shell elpy ace-window python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -153,6 +155,13 @@
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
 
+;; make emacs path variable same as bash path
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (daemonp)
+  (exec-path-from-shell-initialize)))
+
 ;; Idon-vertical
 (use-package ido-vertical-mode
   :ensure t
@@ -173,6 +182,11 @@
   :bind
   ("M-s" . avy-goto-char-2))
 
+;; ace-window
+(use-package ace-window
+  :ensure t
+  :bind ("C-x o" . ace-window))
+
 ;; rainbow mode
 (use-package rainbow-mode
   :ensure t
@@ -192,6 +206,10 @@
   (setq dashboard-items '((recents . 10)))
   (setq dashboard-banner-logo-title "One Hundred Flowers 🌹")
   (setq dashboard-startup-banner "~/Pictures/emacs.png"))
+
+;; ;; emojify
+;; (use-package emojify
+;;   :hook (after-init . global-emojify-mode))
 
 ;; swiper
 (use-package swiper
@@ -219,5 +237,6 @@
 
 ;; Modules
 (load "~/.emacs.d/programming.el")
-(load "~/.emacs.d/lisp-config.el")
+(load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/python.el")
+(load "~/.emacs.d/orgmode.el")

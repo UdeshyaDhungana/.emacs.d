@@ -2,7 +2,7 @@
   :ensure t
   :custom
   (company-auto-complete t)
-  (company-idle-delay 0.2)
+  (company-idle-delay 0.4)
   (company-require-match nil)
   (company-minimum-prefix-length 2)
   :init
@@ -21,13 +21,14 @@
   :config
   (yas-global-mode 1))
 
-
 ;; eglot
 (use-package eglot
   :ensure t
   :config
   (add-to-list 'eglot-server-programs '((c-mode) "clangd"))
-  (add-hook 'c-mode-hook 'eglot-ensure))
+  (add-to-list 'eglot-server-programs '((python-mode) "pyls"))
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  (add-hook 'python-mode-hook 'eglot-ensure))
 
 ;; company quickhelp
 (use-package company-quickhelp
