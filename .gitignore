@@ -33,3 +33,8 @@ custom.el
 /nov-places
 
 ido.last
+.emacs.old/
+elpy/
+projectile-bookmarks.eld
+\#init.el#
+.mc-lists.el

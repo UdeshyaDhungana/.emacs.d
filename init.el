@@ -30,9 +30,9 @@
  '(global-display-line-numbers-mode t)
  '(line-number-mode nil)
  '(org-agenda-files
-   '("~/Org/coursework.org" "~/Org/programming.org" "~/Notes/keybindings.org"))
+   '("~/Org/hobbies.org" "~/Org/coursework.org" "~/Notes/keybindings.org"))
  '(package-selected-packages
-   '(emojify exec-path-from-shell elpy ace-window python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
+   '(slime-autoloads emmet-mode company-web web-mode emojify exec-path-from-shell elpy ace-window python-mode company-jedi lsp-python-ms jedi-core lsp-jedi common-lisp-snippets dracula-theme eglot slime company-lsp flycheck emacs-ccls yasnippet company-box company-irony company lsp-ui magit lsp-mode multiple-cursors swiper popup-kill-ring telephone-line spaceline dashboard hungry-delete rainbow-mode avy smex ido-vertical-mode org-bullets gruvbox-theme which-key use-package))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#282828"))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
@@ -72,7 +72,7 @@
 ;; Ido mode
 (setq ido-enable-flex-matching nil)
 (setq ido-create-new-buffer 'always)
-;; (setq ido-everywhere t)
+(setq ido-everywhere t)
 (ido-mode 1)
 (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
 
@@ -161,7 +161,7 @@
   (when (daemonp)
   (exec-path-from-shell-initialize)))
 
-;; Idon-vertical
+;; Ido-vertical
 (use-package ido-vertical-mode
   :ensure t
   :init
@@ -203,7 +203,7 @@
   :config
   (dashboard-setup-startup-hook)
   (setq dashboard-items '((recents . 10)))
-  (setq dashboard-banner-logo-title "One Hundred Flowers 🌹")
+  (setq dashboard-banner-logo-title "What a wonderful world! 🌹")
   (setq dashboard-startup-banner "~/Pictures/emacs.png"))
 
 ;; emojify mode
@@ -239,3 +239,4 @@
 (load "~/.emacs.d/lisp.el")
 (load "~/.emacs.d/python.el")
 (load "~/.emacs.d/orgmode.el")
+(load "~/.emacs.d/web.el")

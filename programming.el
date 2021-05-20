@@ -54,9 +54,9 @@
   :after '(lsp-mode))
 
 (use-package lsp-mode
-  :hook ((lsp-mode . lsp-enable-which-key-integration))
   :ensure t 
   :defer t 
+  :hook ((lsp-mode . lsp-enable-which-key-integration))
   :commands (lsp lsp-mode)
   :bind (:map lsp-mode-map
 	      ("M-." . lsp-find-definition)
@@ -81,3 +81,6 @@
   (setq lsp-modeline-diagnostics-enable t)
   (setq lsp-signature-auto-activate t)
   (setq lsp-signature-render-documentation t))
+
+;; For octave
+(add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
