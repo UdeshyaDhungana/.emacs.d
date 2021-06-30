@@ -38,3 +38,5 @@ elpy/
 projectile-bookmarks.eld
 \#init.el#
 .mc-lists.el
+personal/.gitkeep
+personal/preload/.gitkeep
