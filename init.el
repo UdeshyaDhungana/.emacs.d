@@ -1,5 +1,7 @@
-;; Essentials
+;; The config I built myself from scratch
+;; To view my personal config on prelude, checkout personal/ directory
 
+;; Essentials
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
