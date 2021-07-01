@@ -1,6 +1,6 @@
 # .emacs.d
 
-This repository contains two of my emacs configuration. The first one is my epersonal one, on the project root. The other one is inside the `personal` directory, which contains `prelude` config files.
+This repository contains two of my emacs configurations. The first one is my personal one, on the project root. The other one is inside the `personal` directory, which contains `prelude` config files.
 
 ## Personal
 
