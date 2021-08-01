@@ -7,7 +7,7 @@
 (super-save-mode -1)
 
 ;; switch between themes
-(defvar *dude-theme-dark* 'vscode-dark-plus)
+(defvar *dude-theme-dark* 'wombat)
 (defvar *dude-theme-light* 'adwaita)
 (defvar *dude-current-theme* *dude-theme-dark*)
 
@@ -59,7 +59,39 @@
   :ensure t
   :bind ("C-s" . swiper))
 
+(use-package emmet-mode
+  :ensure t
+  :config
+  (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'sgml-mode-hook 'emmet-mode)
+  (add-hook 'css-mode-hook  'emmet-mode)
+  (setq emmet-move-cursor-between-quotes t))
+
+;; evil leader mode
+(use-package evil-leader
+  :ensure
+  :after evil
+  :config
+  (global-evil-leader-mode)
+      (evil-leader/set-leader ",")
+      (evil-leader/set-key
+        "," 'save-buffer
+        "b" 'switch-to-buffer
+        "l" 'evil-window-right
+        "h" 'evil-window-left
+        "k" 'evil-window-up
+        "j" 'evil-window-down
+        "v" 'evil-window-vsplit
+        "d" 'evil-window-split
+        "i" 'ibuffer
+        "q" 'kill-curr-buffer
+        "0" 'delete-window
+        "1" 'delete-other-windows
+        "f" 'ido-find-file)
+      (evil-mode t))
+
 ;; company settings
+(setq company-idle-delay 0.2)
 (with-eval-after-load 'company
   (define-key company-active-map [tab] 'company-complete-common-or-cycle)
   (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle))
