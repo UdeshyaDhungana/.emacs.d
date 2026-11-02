@@ -1,0 +1,7 @@
+# Only config is tracked; everything else in ~/.emacs.d is runtime state.
+/*
+!/.gitignore
+!/init.el
+!/custom.el
+!/AGENTS.md
+!/lisp/
