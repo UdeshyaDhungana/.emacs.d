@@ -173,7 +173,7 @@ Then copy `init.el`, `custom.el`, `AGENTS.md`, the LaunchAgent plist, the
   This is about hand-made copies, not Emacs's own `backups/` directory,
   which is already one-per-file and must be left alone: 25 of its entries
   are the only recovery copies for `~/Documents/org-roam` notes.
-- **`ud/` is the interactive namespace.** The prefix exists so `M-x ud/TAB`
+- **`ud-` is the interactive namespace.** The prefix exists so `M-x ud-TAB`
   lists the user's own commands. Only `(interactive)` functions get it.
   Helpers -- including ones that serve a single command, and major modes or
   keymaps reachable only from their own buffer -- take their file's namespace

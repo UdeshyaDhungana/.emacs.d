@@ -21,7 +21,12 @@
      "1d18bef9d0e1b7f30a3290c48fdc52465bdca62564e404c1019bb1fcc8cb0c27"
      "ec717a4698b3fa398eb7f8214adba47d4f51bab42c3925ba0ffe3abc5f82712a"
      default))
- '(org-agenda-files '("/Users/udeshya/Documents/org-roam/daily/2026-11-02.org")))
+ '(package-selected-packages
+   '(auctex cdlatex gruvbox-theme markdown-mode markdown-preview-mode
+            move-text org-appear org-autolist org-fragtog org-modern
+            org-roam racket-mode slime ultra-scroll xterm-color))
+ '(smtpmail-smtp-server "smtp.gmail.com")
+ '(smtpmail-smtp-service 25))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

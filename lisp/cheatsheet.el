@@ -1,16 +1,16 @@
 ;;; cheatsheet.el --- index of my own commands  -*- lexical-binding: t; -*-
 ;;
-;; C-c ? pops up a side window listing every ud/ function with its key
+;; C-c ? pops up a side window listing every ud- function with its key
 ;; binding and the first line of its docstring.
 ;;
 ;; There is nothing to register.  The list is built by walking the obarray
-;; at call time, so a ud/ function appears the moment it is evaluated --
+;; at call time, so a ud- function appears the moment it is evaluated --
 ;; write one, reload, and it is in the list.  The one consequence worth
 ;; knowing: a function in a file that has not been loaded yet is invisible,
 ;; because nothing has defined the symbol.
 ;;
 ;; Everything in here except the entry point is named cheatsheet-*, not
-;; ud/*: ud/ is the M-x namespace, so a non-interactive helper put in it
+;; ud-*: ud- is the M-x namespace, so a non-interactive helper put in it
 ;; would show up as a command you can run.
 ;;
 ;; The payoff for keeping docstrings on your commands is here, so the list
@@ -20,12 +20,12 @@
   "Name of the buffer the cheatsheet renders into.")
 
 (defun cheatsheet--symbols ()
-  "Every ud/ function, sorted by name."
+  "Every ud- function, sorted by name."
   (let (syms)
     (mapatoms
      (lambda (sym)
        (when (and (fboundp sym)
-                  (string-prefix-p "ud/" (symbol-name sym)))
+                  (string-prefix-p "ud-" (symbol-name sym)))
          (push sym syms))))
     (sort syms (lambda (a b) (string< (symbol-name a) (symbol-name b))))))
 
@@ -55,7 +55,7 @@ Within each group the order is alphabetical by key sequence."
           (t (string< ka kb)))))
 
 (defun cheatsheet--entries ()
-  "Build `tabulated-list-entries' for the ud/ functions.
+  "Build `tabulated-list-entries' for the ud- functions.
 Call this in the buffer you want key bindings resolved against, not in
 the cheatsheet buffer itself."
   (mapcar (lambda (sym)
@@ -73,7 +73,7 @@ the cheatsheet buffer itself."
   "RET" #'cheatsheet-describe)
 
 (define-derived-mode cheatsheet-mode tabulated-list-mode "Commands"
-  "Major mode for the ud/ command cheatsheet.
+  "Major mode for the ud- command cheatsheet.
 \\<cheatsheet-mode-map>\\[quit-window] closes the window, \
 \\[cheatsheet-describe] describes the function on the current line."
   (setq tabulated-list-format [("Key" 11 cheatsheet--key<)
@@ -93,11 +93,11 @@ the cheatsheet buffer itself."
     (user-error "No function on this line")))
 
 ;;;###autoload
-(defun ud/shortcuts-cheatsheet ()
-  "List my ud/ commands with their key bindings and one-line summaries.
+(defun ud-shortcuts-cheatsheet ()
+  "List my ud- commands with their key bindings and one-line summaries.
 Opens a side window on the right; q closes it, RET describes the
 function on the current line.  The list is regenerated on every call, so
-newly written ud/ functions show up without registering them anywhere."
+newly written ud- functions show up without registering them anywhere."
   (interactive)
   ;; Resolve bindings here, while the original buffer is still current --
   ;; inside the cheatsheet buffer only its own keymaps would be active.
@@ -114,10 +114,10 @@ newly written ud/ functions show up without registering them anywhere."
     (select-window
      (display-buffer-in-side-window
       buf '((side . right) (window-width . 76) (slot . 0))))
-    (message "%d ud/ command(s).  q to close, RET to describe, g to refresh"
+    (message "%d ud- command(s).  q to close, RET to describe, g to refresh"
              (length entries))))
 
-(global-set-key (kbd "C-c ?") #'ud/shortcuts-cheatsheet)
+(global-set-key (kbd "C-c ?") #'ud-shortcuts-cheatsheet)
 
 (provide 'cheatsheet)
 ;;; cheatsheet.el ends here

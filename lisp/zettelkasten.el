@@ -3,34 +3,72 @@
 ;; Everything note-related lives here; init.el loads it.  Keys under C-c n:
 ;;   j today's scratch   f find note      i insert link    e extract subtree
 ;;   d jump to a date    c new note       s search text
-;; Not bound, run with M-x: ud/org-roam-delete-note
+;;   t todo file
+;; Devanagari keys live under C-c d (C-c d h r: half-ra).
+;; Math keys live under C-c m (i inline, d display).
+;; Not bound, run with M-x: ud-org-roam-delete-note
 
 (require 'cl-lib)
+
+;; Half-ra for Devanagari typing: र + virama + zero-width joiner, so the next
+;; consonant joins as र्‍य rather than forming the reph (र्य).
+(defun ud-insert-half-ra ()
+  "Insert र् + ZWJ (half-ra form), ready to be followed by a consonant."
+  (interactive)
+  (insert "र्‍"))
+
+;; Insert an empty math pair with point inside, ready for cdlatex keys.
+(defun ud-insert-inline-math ()
+  "Insert \\( \\) with point in the middle."
+  (interactive)
+  (insert "\\(  \\)")
+  (backward-char 3))
+
+(defun ud-insert-display-math ()
+  "Insert \\[ \\] with point in the middle."
+  (interactive)
+  (insert "\\[  \\]")
+  (backward-char 3))
 
 ;; org mode
 (use-package org
   :hook (org-mode . visual-line-mode)
-  :custom (org-pretty-entities t))
+  :bind (:map org-mode-map
+              ("C-c d h r" . ud-insert-half-ra)
+              ("C-c m i"   . ud-insert-inline-math)
+              ("C-c m d"   . ud-insert-display-math)
+              ;; Unbound: it adds files to the agenda list behind your back.
+              ("C-c [" . nil)
+              ("C-c ]" . nil))
+  ;; The agenda reads only the todo file below, set here rather than via
+  ;; Customize so custom.el does not carry it.
+  :custom ((org-pretty-entities t)
+           (org-agenda-files '("~/Documents/todo.org"))))
 
 ;; One todo file, kept outside the org-roam vault on purpose so it is neither
 ;; a node (C-c n f) nor grepped by C-c n s.  M-S-RET adds a "- [ ] " item,
 ;; C-c C-c toggles it, C-S-backspace deletes the line.
-(defun ud/org-todo ()
+(defun ud-org-todo ()
   "Open the todo file."
   (interactive)
   (find-file "~/Documents/todo.org"))
-(global-set-key (kbd "C-c t") #'ud/org-todo)
+(global-set-key (kbd "C-c n t") #'ud-org-todo)
 
 ;; appearance
 (setq org-hide-emphasis-markers t
-      org-pretty-entities t)          ; \alpha -> α, no LaTeX needed
+      org-pretty-entities t           ; \alpha -> α, no LaTeX needed
+      ;; ...but leave _{} ^{} visible: hiding them makes empty cdlatex
+      ;; templates (suml TAB) look like they have no braces.
+      org-pretty-entities-include-sub-superscripts nil)
 
 ;; BasicTeX installs to /Library/TeX/texbin, which is not in the PATH launchd
-;; hands the daemon, so Emacs cannot find latex without this.
+;; hands the daemon, so Emacs cannot find latex without this.  Guarded because
+;; this file is re-run on every config reload and `setenv' would stack copies.
 (let ((texbin "/Library/TeX/texbin"))
   (when (file-directory-p texbin)
     (add-to-list 'exec-path texbin)
-    (setenv "PATH" (concat texbin ":" (getenv "PATH")))))
+    (unless (member texbin (split-string (getenv "PATH") ":"))
+      (setenv "PATH" (concat texbin ":" (getenv "PATH"))))))
 
 ;; math
 ;; dvisvgm renders fragments as SVG, so they stay sharp at 18pt and when zoomed.
@@ -54,6 +92,22 @@
   :hook (org-mode . org-modern-mode)
   :custom (org-modern-list '((?- . "•") (?+ . "◦") (?* . "–"))))
 
+;; RET on a list item starts the next one (a checkbox if this one has one);
+;; RET on an empty item ends the list.  Saves reaching for M-RET / M-S-RET.
+(use-package org-autolist
+  :hook (org-mode . org-autolist-mode)
+  :config
+  ;; Its checkbox branch reads the item via (plist-get (cadr el) :parent),
+  ;; which Org 9.7's org-element rewrite broke, so "- [ ] foo" RET falls
+  ;; through to plain `org-meta-return' and loses the box.  Put it back,
+  ;; only for RET so M-RET keeps its meaning.
+  (define-advice org-meta-return (:around (fn &rest args) zettelkasten--checkbox)
+    (let ((item (org-in-item-p)))
+      (if (and (eq this-command 'org-return) item
+               (save-excursion (goto-char item) (org-at-item-checkbox-p)))
+          (org-insert-item t)
+        (apply fn args)))))
+
 (use-package org-appear
   :hook (org-mode . org-appear-mode)
   :custom (org-appear-autoemphasis t))
@@ -63,7 +117,7 @@
 ;; cannot accept a filename that does not exist yet -- cancelling there
 ;; leaves an :ID: behind with no file.
 (require 'cl-lib)
-(defun ud/org-roam-extract-subtree ()
+(defun ud-org-roam-extract-subtree ()
   "Extract the subtree at point into its own file, no prompt."
   (interactive)
   (let ((source (buffer-file-name (buffer-base-buffer))))
@@ -83,7 +137,7 @@
       (org-roam-db-update-file source))))
 
 ;; Full-text search across every note.  C-c n f only matches titles.
-(defun ud/org-roam-search (regexp)
+(defun ud-org-roam-search (regexp)
   "Search the text of every note for REGEXP."
   (interactive "sSearch notes: ")
   (require 'org-roam)
@@ -92,7 +146,7 @@
                   (shell-quote-argument regexp)))))
 
 ;; Delete a note, warning about backlinks first.
-(defun ud/org-roam-delete-note ()
+(defun ud-org-roam-delete-note ()
   "Delete the file of a note chosen by title, after showing its backlinks."
   (interactive)
   (require 'org-roam)
@@ -122,10 +176,10 @@
   :bind (("C-c n j" . org-roam-dailies-goto-today)
          ("C-c n f" . org-roam-node-find)
          ("C-c n i" . org-roam-node-insert)
-         ("C-c n e" . ud/org-roam-extract-subtree)
+         ("C-c n e" . ud-org-roam-extract-subtree)
          ("C-c n d" . org-roam-dailies-goto-date)
          ("C-c n c" . org-roam-capture)
-         ("C-c n s" . ud/org-roam-search))
+         ("C-c n s" . ud-org-roam-search))
   :config
   ;; Dailies are scratch, not notes: keep every node in daily/ out of the
   ;; database so they never appear in C-c n f.
@@ -154,20 +208,6 @@ problem can never leave you staring at an unusable frame."
 
 (setq initial-buffer-choice #'zettelkasten--today-buffer)
 
-;; Convert bullets to checkboxes in org mode
-(defun ud/org-convert-to-checkbox (arg)
-  "Turn the next ARG lines, or the active region, into \"- [ ] \" checkboxes."
-  (interactive "P")
-  (let ((n (or arg 1)))
-    (when (region-active-p)
-      (setq n (count-lines (region-beginning)
-                           (region-end)))
-      (goto-char (region-beginning)))
-    (dotimes (i n)
-      (beginning-of-line)
-      (insert "- [ ] ")
-      (forward-line))
-    (beginning-of-line)))
 
 (provide 'zettelkasten)
 ;;; zettelkasten.el ends here
