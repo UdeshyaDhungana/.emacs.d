@@ -188,6 +188,10 @@
   (message "Reloaded %s" (abbreviate-file-name user-init-file)))
 
 ;; Themes-------
+;; ef-themes provides every theme below; without this block a fresh machine
+;; has no theme files and `load-theme' aborts the rest of this file.
+(use-package ef-themes)
+
 ;; light
 ;; ef-melissa-light
 ;; ef-arcadia
