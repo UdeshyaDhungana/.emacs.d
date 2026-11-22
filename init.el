@@ -173,6 +173,14 @@
   :config
   (slime-setup '(slime-fancy)))
 
+
+;; vterm
+;; -----
+;; Terminal emulator in a buffer.  C-c C-t: copy mode (scroll).  Needs
+;; `brew install libvterm'; the module is built on first use.
+(use-package vterm
+  :custom (vterm-always-compile-module t))
+
 (defun ud-prep ()
   "Open the NTC exam prep TODO list."
   (interactive)
