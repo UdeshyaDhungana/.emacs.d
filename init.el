@@ -36,7 +36,7 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(vertical-scroll-bars . right))
 ;; setf, not add-to-list: replaces any earlier font entry on reload.
-(setf (alist-get 'font default-frame-alist) "JetBrains Mono-18")
+(setf (alist-get 'font default-frame-alist) "Monaco-18")
 
 (setq inhibit-startup-screen t
       ring-bell-function 'ignore
@@ -46,7 +46,7 @@
 
 (menu-bar-mode 1)
 (tool-bar-mode -1)
-(set-scroll-bar-mode 'right)
+(scroll-bar-mode -1)
 (column-number-mode 1)
 (setq display-line-numbers-type 'relative)
 (global-display-line-numbers-mode 1)
@@ -58,9 +58,9 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file t)
 (setopt display-line-numbers-width-start t)
-(global-tab-line-mode 1)
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
+(tab-line-mode 1)
 
 ;; --- server ---
 ;; Fixed socket path so emacsclient always finds the daemon, regardless of
@@ -181,11 +181,29 @@
 (use-package vterm
   :custom (vterm-always-compile-module t))
 
-(defun ud-prep ()
-  "Open the NTC exam prep TODO list."
+;; C-c v v / M-x ud-vt: go to a vterm, making one if none exists; with
+;; several, pick one.  C-c v n / M-x ud-vt-new: always make a new one.
+;; (Stock `vterm' only reaches *vterm*.)
+(defun ud-vt ()
+  "Switch to a vterm buffer, creating one if there is none.
+With several, choose by name."
   (interactive)
-  (find-file "~/Documents/ntc-prep.org"))
+  (let ((bufs (seq-filter (lambda (b)
+                            (eq (buffer-local-value 'major-mode b) 'vterm-mode))
+                          (buffer-list))))
+    (pcase (length bufs)
+      (0 (vterm))
+      (1 (switch-to-buffer (car bufs)))
+      (_ (switch-to-buffer
+          (completing-read "vterm: " (mapcar #'buffer-name bufs) nil t))))))
 
+(defun ud-vt-new ()
+  "Create a new vterm buffer, even if others exist."
+  (interactive)
+  (vterm t))
+
+(global-set-key (kbd "C-c v v") #'ud-vt)
+(global-set-key (kbd "C-c v n") #'ud-vt-new)
 
 ;; END OF THE FILE: Any packages should be declared above this line
 ;; Reload this file without restarting.
@@ -264,8 +282,11 @@
               ("C-c ]" . nil))
   ;; The agenda reads only the todo file below, set here rather than via
   ;; Customize so custom.el does not carry it.
+  ;; org-clock-sound is what timers (C-c C-x ; and the clock effort alarm)
+  ;; play when they finish; a file name is played with afplay on macOS.
   :custom ((org-pretty-entities t)
-           (org-agenda-files '("~/Documents/todo.org"))))
+           (org-agenda-files '("~/Documents/todo.org"))
+           (org-clock-sound (expand-file-name "sounds/bell.wav" user-emacs-directory))))
 
 ;; One todo file, kept outside the org-roam vault on purpose so it is neither
 ;; a node (C-c n f) nor grepped by C-c n s.  M-S-RET adds a "- [ ] " item,

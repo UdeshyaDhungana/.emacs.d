@@ -24,7 +24,7 @@
  '(package-selected-packages
    '(auctex cdlatex gruvbox-theme markdown-mode markdown-preview-mode
             move-text org-appear org-autolist org-fragtog org-modern
-            org-roam racket-mode ultra-scroll vterm))
+            org-roam racket-mode vterm))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
 (custom-set-faces
